@@ -10,7 +10,7 @@ const upload=fInstance.upload('products');
 productRouter.get('/',pInstance.index);
 productRouter.post('/',upload.single('image'),pInstance.store);
 productRouter.get('/:id',pInstance.show);
-productRouter.put('/',pInstance.update);
-productRouter.delete('/',pInstance.destroy);
+productRouter.put('/:id',upload.single('image'),pInstance.update);
+productRouter.delete('/:id',pInstance.destroy);
 
 export default productRouter;
