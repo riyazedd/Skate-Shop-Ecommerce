@@ -17,7 +17,7 @@ class ProductController {
                 image = req.file.filename;
             }
             await Product.create({ ...req.body, image });
-            res.status(200).json({ message: "Product Added Succesfully" });
+            res.status(200).json({success:true});
         } catch (err) {
             res.status(500).json({ message: err.message })
         }
@@ -44,7 +44,7 @@ class ProductController {
             }
             
             await Product.findByIdAndUpdate(id, { ...req.body, image });
-            res.status(200).json({ message: "Product Updated Succesfully" });
+            res.status(200).json({success:true});
         } catch (err) {
             res.status(500).json({ message: err.message });
         }

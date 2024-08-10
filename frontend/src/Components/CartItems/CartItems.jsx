@@ -18,9 +18,11 @@ const CartItems = () => {
                     </tr>
                 </thead>
 
-                {all_product.map((e) => {
+                {all_product.map((e,i) => {
                     if (cartItems[e.id] > 0) {
-                        return <tbody> <tr className='border-b-2'>
+                        return (
+                            <tbody key={i}>
+                            <tr className='border-b-2'>
                             <td className='p-5'><img src={e.image} alt="" className='w-10 h-10' /></td>
                             <td className='p-5'>{e.name}</td>
                             <td className='p-5'>Rs.{e.new_price}</td>
@@ -28,7 +30,7 @@ const CartItems = () => {
                             <td className='p-5'>Rs.{e.new_price * cartItems[e.id]}</td>
                             <td className='p-5 text-center text-2xl text-red-600'><i onClick={() => { removeFromCart(e.id) }} className='fa-solid fa-trash cursor-pointer'></i></td>
                         </tr>
-                        </tbody>
+                        </tbody>)
                     }
                     return null;
                 })}

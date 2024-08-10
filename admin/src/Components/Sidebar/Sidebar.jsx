@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 const Sidebar = () => {
   return (
-    <div className='h-screen flex'>
+    <div className='h-screen flex sticky top-0'>
       <div className="hidden md:flex flex-col w-64 bg-gray-800">
         <div className="flex flex-col flex-1 overflow-y-auto">
             <nav className="flex-1 px-2 py-4 bg-gray-800">

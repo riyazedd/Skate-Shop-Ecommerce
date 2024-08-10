@@ -1,13 +1,26 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { ShopContext } from '../../Context/ShopContext';
 
 const ProductDisplay = (props) => {
     const { product } = props;
     const { addToCart } = useContext(ShopContext);
-    const [quantity, setQuantity] = useState();
+    const [quantity, setQuantity] = useState(1);
 
     const handleQuantityChange = (e) => {
         setQuantity(Number(e.target.value));
+    };
+
+    // useEffect(() => {
+    //     console.log('Product ID:', product.id);
+    //     console.log('Quantity:', quantity);
+    // }, [product.id, quantity]);
+
+    const handleAddToCart = () => {
+        if (quantity > 0) {
+            addToCart(product.id, quantity);
+        } else {
+            console.log('Quantity must be greater than 0');
+        }
     };
 
     return (
@@ -26,7 +39,7 @@ const ProductDisplay = (props) => {
                         <p className='text-4xl font-bold'>{product.name}</p>
                         <p className='text-2xl font-medium text-red-700 mt-3'>
                             Rs.{product.new_price} 
-                            <span className='line-through text-gray-500'>
+                            <span className='line-through text-gray-500 ml-2'>
                                 Rs.{product.old_price}
                             </span>
                         </p>
@@ -36,14 +49,14 @@ const ProductDisplay = (props) => {
                         <input 
                             type="number" 
                             className='border-2 p-1 w-20 rounded-md' 
-                            defaultValue="1"
+                            value={quantity}
                             onChange={handleQuantityChange} 
                             min="1" 
                         />
                         <p className='text-lg font-medium text-gray-700 capitalize'>in stock</p>
                     </div>
                     <button 
-                        onClick={() => addToCart(product.id, quantity)} 
+                        onClick={handleAddToCart} 
                         className='transition-all p-3 w-1/3 text-lg text-white rounded-lg font-semibold bg-purple-600 hover:shadow-xl hover:scale-105 hover:shadow-purple-400 border-0'
                     >
                         Add to Cart
