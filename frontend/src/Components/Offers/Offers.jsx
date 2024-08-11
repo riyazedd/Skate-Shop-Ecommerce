@@ -10,7 +10,7 @@ const Offers = () => {
                 <div className='absolute inset-0 ml-20 p-10 w-[40%] flex flex-col justify-center items-start'>
                     <p className='text-7xl text-white font-semibold font-inter'>Exclusive Offers For You</p>
                     <p className='text-white uppercase font-medium mt-3'>only best sellers products</p>
-                    <button className='text-white font-medium mt-10 p-2 px-5 bg-red-500 rounded-full'>Check Now</button>
+                    <button className='text-white font-medium mt-10 p-2 px-5 bg-purple-600 border hover:shadow-xl hover:shadow-purple-500 hover:scale-105 transition-all rounded-full'>Check Now</button>
                 </div>
             </div>
         </div>

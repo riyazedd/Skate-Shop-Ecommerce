@@ -24,6 +24,7 @@ const ProductList = () => {
   }
 
   const remove = async (id) => {
+    confirm("Do you want to delete this product?")
     try {
       await API.delete(`/product/${id}`);
       setProduct(products.filter(product => product._id !== id));

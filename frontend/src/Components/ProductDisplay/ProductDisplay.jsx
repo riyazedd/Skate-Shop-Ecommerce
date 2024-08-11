@@ -10,14 +10,10 @@ const ProductDisplay = (props) => {
         setQuantity(Number(e.target.value));
     };
 
-    // useEffect(() => {
-    //     console.log('Product ID:', product.id);
-    //     console.log('Quantity:', quantity);
-    // }, [product.id, quantity]);
 
     const handleAddToCart = () => {
         if (quantity > 0) {
-            addToCart(product.id, quantity);
+            addToCart(product._id, quantity);
         } else {
             console.log('Quantity must be greater than 0');
         }
@@ -25,12 +21,12 @@ const ProductDisplay = (props) => {
 
     return (
         <div>
-            <div className='p-8 flex gap-10'>
-                <div className='w-14 flex flex-col gap-3'>
+            <div className='pl-20 py-5 flex gap-10'>
+                {/* <div className='w-14 flex flex-col gap-3'>
                     <img src={product.image} alt="" className='border p-1' />
                     <img src={product.image} alt="" className='border p-1' />
                     <img src={product.image} alt="" className='border p-1' />
-                </div>
+                </div> */}
                 <div className='w-[500px] border p-5'>
                     <img src={product.image} alt="" />
                 </div>
