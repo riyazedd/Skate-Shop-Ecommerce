@@ -1,25 +1,25 @@
-import React, {useState,useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import Sidebar from '../Components/Sidebar/Sidebar'
 import API from '../API'
 import { Link } from 'react-router-dom'
 
 const ProductList = () => {
-  const [products,setProduct]=useState([]);
-  const [categories,setCategory]=useState([]);
-  useEffect(()=>{
-    API.get('/product').then(res=>{
+  const [products, setProduct] = useState([]);
+  const [categories, setCategory] = useState([]);
+  useEffect(() => {
+    API.get('/product').then(res => {
       setProduct(res.data)
     })
 
-    API.get('/category').then(res=>{
+    API.get('/category').then(res => {
       setCategory(res.data);
     })
 
 
-  },[])
+  }, [])
 
-  const getCategoryName=(catId)=>{
-    const category=categories.find((cat)=>cat._id===catId)
+  const getCategoryName = (catId) => {
+    const category = categories.find((cat) => cat._id === catId)
     return category ? category.cat_name : "unknown"
   }
 
@@ -53,25 +53,30 @@ const ProductList = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-300 ">
-              {products && products.map((product,i)=>(
+              {products && products.map((product, i) => (
                 <tr className="bg-white transition-all duration-500 hover:bg-gray-50" key={i}>
-                <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900 ">{++i}</td>
-                <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900"> <img src={product.image} className='w-12' alt="" /> </td>
-                <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900"> {product.name} </td>
-                <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900"> {getCategoryName(product.categoryId)}</td>
-                <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900"> {product.quantity}</td>
-                <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900"> {product.new_price}</td>
-                <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900"> {product.old_price}</td>
-                <td className=" p-5 ">
-                  <div className="flex items-center gap-5">
-                    <Link to={`/updateproduct/${product._id}`}><button><i className="fa-solid fa-pen-to-square text-blue-700"></i></button></Link>
-                    <button onClick={() => remove(product._id)}><i className="fa-solid fa-trash text-red-600"></i></button>
-                  </div>
-                </td>
-              </tr>
+                  <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900 ">{++i}</td>
+                  <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900"> <img src={product.image} className='w-12' alt="" /> </td>
+                  <td
+                    className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900 max-w-xs overflow-hidden text-ellipsis"
+                    style={{ maxWidth: '200px' }}>
+                    {product.name}
+                  </td>
+
+                  <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900"> {getCategoryName(product.categoryId)}</td>
+                  <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900"> {product.quantity}</td>
+                  <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900"> {product.new_price}</td>
+                  <td className="p-5 whitespace-nowrap text-sm leading-6 font-medium text-gray-900"> {product.old_price}</td>
+                  <td className=" p-5 ">
+                    <div className="flex items-center gap-5">
+                      <Link to={`/updateproduct/${product._id}`}><button><i className="fa-solid fa-pen-to-square text-blue-700"></i></button></Link>
+                      <button onClick={() => remove(product._id)}><i className="fa-solid fa-trash text-red-600"></i></button>
+                    </div>
+                  </td>
+                </tr>
               ))}
-              
-            </tbody>  
+
+            </tbody>
           </table>
         </div>
       </div>

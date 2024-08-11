@@ -12,16 +12,29 @@ class ProductController {
 
     async store(req, res) {
         try {
-            let image = "";
-            if (req.file) {
-                image = req.file.filename;
+            let products = req.body;
+
+            if (!Array.isArray(products)) {
+                products = [products];
             }
-            await Product.create({ ...req.body, image });
-            res.status(200).json({success:true});
+    
+            const createdProducts = [];
+            for (let productData of products) {
+                let image = "";
+                if (req.file) {
+                    image = req.file.filename;
+                }
+
+                const newProduct = await Product.create({ ...productData, image });
+                createdProducts.push(newProduct);
+            }
+    
+            res.status(200).json({ success: true });
         } catch (err) {
-            res.status(500).json({ message: err.message })
+            res.status(500).json({ message: err.message });
         }
     }
+    
 
     async show(req, res) {
         try {

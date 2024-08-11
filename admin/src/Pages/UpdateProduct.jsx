@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import Sidebar from '../Components/Sidebar/Sidebar';
 import API from '../API';
 
 const UpdateProduct = () => {
+  const navigate=useNavigate();
   const initialProductState = {
     name: "",
     categoryId: "",
@@ -75,6 +76,7 @@ const UpdateProduct = () => {
       .then((res) => {
         if (res.data.success) {
           alert("Updated Successfully");
+          navigate('/');
         }
       })
       .catch((err) => {
