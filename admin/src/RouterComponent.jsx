@@ -4,12 +4,14 @@ import ProductList from './Pages/ProductList'
 import AddProduct from './Pages/AddProduct'
 import Orders from './Pages/Orders'
 import UpdateProduct from './Pages/UpdateProduct'
+import Login from './Pages/Login'
 
 
 const RouterComponent = () => {
   return (
     <Routes>
-        <Route path="/" element={<ProductList />}></Route>
+        <Route path="/" element={<Login />}></Route>
+        <Route path="/list" element={<ProductList />}></Route>
         <Route path="/addproduct" element={<AddProduct />}></Route>
         <Route path="/orders" element={<Orders />}></Route>
         <Route path="/updateproduct/:id" element={<UpdateProduct/>}></Route>
