@@ -5,7 +5,7 @@ const LoginSignup = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [agreed, setAgreed] = useState(false); // Checkbox state
+  const [agreed, setAgreed] = useState(false); 
 
   const handleSubmit = (e) => {
     e.preventDefault();

@@ -14,13 +14,13 @@ const Login = () => {
     e.preventDefault();
     
     try {
-      // Use a POST request to send email and password
+      
       const res = await API.post('/admin/search', { email, password });
       
       if (res.data === 'success') {
         navigate('/list');
       } else {
-        setError(res.data); // Show the error message returned by the server
+        setError(res.data); 
       }
     } catch (err) {
       setError('An error occurred while logging in.');
