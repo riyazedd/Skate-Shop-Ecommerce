@@ -76,7 +76,7 @@ const UpdateProduct = () => {
       .then((res) => {
         if (res.data.success) {
           alert("Updated Successfully");
-          navigate('/');
+          navigate('/list');
         }
       })
       .catch((err) => {
