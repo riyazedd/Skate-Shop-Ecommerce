@@ -18,7 +18,7 @@ const RouterComponent = () => {
           <Route path='/trucks' element={<ShopCategory category="trucks" />} />
           <Route path="/product/:productId" element={<Product />} />
           <Route path="/cart" element={<Cart />} />
-          <Route path="/login" element={<LoginSignup />} />
+          <Route path="/signup" element={<LoginSignup />} />
         </Routes>
     </div>
   )
