@@ -26,7 +26,7 @@ const Navbar = () => {
   }, []);
   
   return (
-    <div className={`flex items-center p-5 bg-purple-700 sticky z-10 shadow-lg shadow-purple-500 transition-transform duration-300 ${isScrolled ? 'w-[500px] top-5 left-1/2 transform -translate-x-1/2 rounded-full justify-center' : 'w-full top-0 justify-between'}`}>
+    <div className={`flex items-center p-5 bg-purple-700 sticky z-10 shadow-lg shadow-purple-500 transition-transform duration-300 ${isScrolled ? 'w-[500px] top-5 left-1/2 transform -translate-x-1/2 rounded-full justify-center bg-opacity-95' : 'w-full top-0 justify-between'}`}>
       {/* Logo */}
       <div className={`h-10 flex items-center gap-3 ${isScrolled ? 'hidden' : 'ml-10'}`}>
         <img src={logo} alt="logo" className='h-full' />
