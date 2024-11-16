@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import API from '../API';
+import { Link , useNavigate } from 'react-router-dom';
 
 const LoginSignup = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [address, setAddress] = useState('');
+  const [contact, setContact] = useState('');
   const [agreed, setAgreed] = useState(false); 
+  const navigate =useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -24,6 +28,8 @@ const LoginSignup = () => {
       name: name,
       email: email,
       password: password,
+      address: address,
+      contact: contact,
     };
   
     API.post('/user', data)
@@ -33,6 +39,10 @@ const LoginSignup = () => {
           setName('');
           setEmail('');
           setPassword('');
+          setAddress('');
+          setContact('');
+          navigate('/login');
+
         } else {
           alert('Error Registering User');
         }
@@ -75,6 +85,22 @@ const LoginSignup = () => {
             className='border-2 rounded-lg p-3 placeholder:text-lg w-full text-lg'
             required
           />
+          <input
+            type='text'
+            value={address}
+            placeholder='Your Address'
+            onChange={(e) => setAddress(e.target.value)}
+            className='border-2 rounded-lg p-3 placeholder:text-lg w-full text-lg'
+            required
+          />
+          <input
+            type='text'
+            value={contact}
+            placeholder='Your Contact Number'
+            onChange={(e) => setContact(e.target.value)}
+            className='border-2 rounded-lg p-3 placeholder:text-lg w-full text-lg'
+            required
+          />
         </div>
         <button
           className='mt-5 w-[350px] bg-purple-600 p-3 text-white text-2xl rounded-lg'
@@ -84,7 +110,7 @@ const LoginSignup = () => {
         </button>
         <p className='mt-3'>
           Already have an account?{' '}
-          <span className='text-purple-600 font-semibold'>Login here</span>
+          <Link to='/login'><span className='text-purple-600 font-semibold'>Login here</span></Link>
         </p>
         <div className='flex gap-2 mt-5'>
           <input

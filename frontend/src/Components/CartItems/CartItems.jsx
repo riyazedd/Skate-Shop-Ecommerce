@@ -1,8 +1,30 @@
 import React, { useContext } from 'react';
 import { ShopContext } from '../../Context/ShopContext';
+// import dotenv from "dotenv"
+import CryptoJS from "crypto-js";
+import { v4 as uuidv4 } from 'uuid';
+// dotenv.config()
+
+
 
 const CartItems = () => {
-    const { allProducts, cartItems, removeFromCart, getTotalAmount } = useContext(ShopContext); // Changed all_product to allProducts
+    const { allProducts, cartItems, removeFromCart, getTotalAmount } = useContext(ShopContext);
+    const uid = uuidv4();
+    const amount = getTotalAmount();
+    const tax = Math.round((amount * 0.1) * 100) / 100;
+    const totalamount = Math.round((amount + tax) * 100) / 100;
+
+    
+    
+    const message = `total_amount=${totalamount},transaction_uuid=${uid},product_code=EPAYTEST`;
+    const esewasecret = import.meta.env.VITE_ESEWASECRET;
+    const hash = CryptoJS.HmacSHA256(message, esewasecret);
+    const signature = CryptoJS.enc.Base64.stringify(hash);
+    // console.log(amount)
+    // console.log(totalamount)
+    // console.log(uid);
+    // console.log(message)
+
 
     return (
         <div className='p-5 flex flex-col items-center'>
@@ -49,7 +71,11 @@ const CartItems = () => {
                     <tbody>
                         <tr>
                             <td className='p-3 pl-0 text-left'>Subtotal</td>
-                            <td className='p-3 pl-20 text-right'>Rs.{getTotalAmount()}</td>
+                            <td className='p-3 pl-20 text-right'>Rs.{amount}</td>
+                        </tr>
+                        <tr>
+                            <td className='p-3 pl-0 text-left'>Tax</td>
+                            <td className='p-3 pl-20 text-right'>{amount*0.1}</td>
                         </tr>
                         <tr className='border-b-4'>
                             <td className='p-3 pl-0 text-left'>Shipping Fee</td>
@@ -57,13 +83,30 @@ const CartItems = () => {
                         </tr>
                         <tr>
                             <th className='p-3 pl-0 text-left'>Total</th>
-                            <td className='p-3 pl-20 text-right'>Rs.{getTotalAmount()}</td>
+                            <td className='p-3 pl-20 text-right'>Rs.{totalamount}</td>
                         </tr>
                     </tbody>
                 </table>
-                <button className='bg-purple-700 px-5 py-3 text-xl mt-10 text-white font-medium rounded-lg hover:scale-105 hover:shadow-lg hover:shadow-purple-500 transition-all'>
+                {/* <button className='bg-purple-700 px-5 py-3 text-xl mt-10 text-white font-medium rounded-lg hover:scale-105 hover:shadow-lg hover:shadow-purple-500 transition-all'>
+                    Proceed To Checkout
+                </button> */}
+
+                <form action="https://rc-epay.esewa.com.np/api/epay/main/v2/form" method="POST">
+                    <input type="hidden" id="amount" name="amount" value={amount} required />
+                    <input type="hidden" id="tax_amount" name="tax_amount" value={tax} required />
+                    <input type="hidden" id="total_amount" name="total_amount" value={totalamount} required />
+                    <input type="hidden" id="transaction_uuid" name="transaction_uuid" value={uid} required />
+                    <input type="hidden" id="product_code" name="product_code" value="EPAYTEST" required />
+                    <input type="hidden" id="product_service_charge" name="product_service_charge" value="0" required />
+                    <input type="hidden" id="product_delivery_charge" name="product_delivery_charge" value="0" required />
+                    <input type="hidden" id="success_url" name="success_url" value="http://localhost:5173/success" required />
+                    <input type="hidden" id="failure_url" name="failure_url" value="http://localhost:5173/failure" required />
+                    <input type="hidden" id="signed_field_names" name="signed_field_names" value="total_amount,transaction_uuid,product_code" required />
+                    <input type="hidden" id="signature" name="signature" value={signature} required />
+                    <button className='bg-purple-700 px-5 py-3 text-xl mt-10 text-white font-medium rounded-lg hover:scale-105 hover:shadow-lg hover:shadow-purple-500 transition-all'>
                     Proceed To Checkout
                 </button>
+                </form>
             </div>
         </div>
     );

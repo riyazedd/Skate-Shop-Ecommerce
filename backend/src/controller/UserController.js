@@ -57,6 +57,7 @@ class UserController {
             const user = await User.findOne({ email: email });
 
             if (user) {
+                
                 if (user.password === password) {
                     res.json("success");
                 } else {
