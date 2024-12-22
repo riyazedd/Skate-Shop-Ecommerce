@@ -10,22 +10,21 @@ const Login = () => {
     const navigate= useNavigate();
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        
-        try {
-          
+      e.preventDefault();
+      
+      try {
           const res = await API.post('/user/search', { email, password });
-          
           if (res.data === 'success') {
-            alert('Logged in Sucessfully')
-            navigate('/');
+              alert('Logged in Successfully'); 
+              navigate('/');
           } else {
-            setError(res.data); 
+              setError(res.data); 
           }
-        } catch (err) {
+      } catch (err) {
           setError('An error occurred while logging in.');
-        }
-      };
+      }
+  };
+  
 
   return (
     <div>

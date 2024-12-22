@@ -55,10 +55,10 @@ class UserController {
         try {
             const { email, password } = req.body;
             const user = await User.findOne({ email: email });
-
+    
             if (user) {
-                
                 if (user.password === password) {
+                    // req.session.userId = user._id;
                     res.json("success");
                 } else {
                     res.json("Password Incorrect");
@@ -70,6 +70,7 @@ class UserController {
             res.status(500).json({ message: err.message });
         }
     }
+    
 }
 
 export default UserController;

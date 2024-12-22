@@ -1,30 +1,58 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { ShopContext } from '../../Context/ShopContext';
-// import dotenv from "dotenv"
 import CryptoJS from "crypto-js";
 import { v4 as uuidv4 } from 'uuid';
-// dotenv.config()
-
-
+import API from '../../API';
 
 const CartItems = () => {
     const { allProducts, cartItems, removeFromCart, getTotalAmount } = useContext(ShopContext);
+    const [orderBy,setOrderBy]=useState();
+    const [product,setProduct]=useState();
+    const [quantity,setQuantity]=useState();
+    const [price,setPrice]=useState();
+    
     const uid = uuidv4();
     const amount = getTotalAmount();
     const tax = Math.round((amount * 0.1) * 100) / 100;
     const totalamount = Math.round((amount + tax) * 100) / 100;
+    const userId = "USER_ID";  // Replace this with actual user context or state
 
-    
-    
     const message = `total_amount=${totalamount},transaction_uuid=${uid},product_code=EPAYTEST`;
     const esewasecret = import.meta.env.VITE_ESEWASECRET;
     const hash = CryptoJS.HmacSHA256(message, esewasecret);
     const signature = CryptoJS.enc.Base64.stringify(hash);
-    // console.log(amount)
-    // console.log(totalamount)
-    // console.log(uid);
-    // console.log(message)
+    
+    const handleOrder = async (event) => {
+        event.preventDefault();  // Prevent form submission
 
+        const orders = allProducts
+            .filter(e => cartItems[e._id] > 0)
+            .map(e => ({
+                orderedBy: userId || "guest",
+                productId: e._id,
+                quantity: cartItems[e._id],
+                price: e.new_price * cartItems[e._id],
+            }));
+        
+        const order={
+            orderedBy:orders[0].orderedBy,
+            productId:orders[0].productId,
+            quantity:orders[0].quantity,
+            price:orders[0].price
+        }
+        console.log(order);
+
+        try {
+            const res = await API.post('/order', order);
+            if (res.data.success) {
+                alert("Order Placed Successfully");
+                event.target.submit();  
+            }
+        } catch (error) {
+            console.error('Error placing order:', error);
+            alert("Failed to place order. Please try again.");
+        }
+    };
 
     return (
         <div className='p-5 flex flex-col items-center'>
@@ -41,13 +69,12 @@ const CartItems = () => {
                 </thead>
 
                 {allProducts.map((e, i) => {
-                    // Make sure to use e._id instead of e.id
                     if (cartItems[e._id] > 0) {
                         return (
                             <tbody key={i}>
                                 <tr className='border-b-2'>
                                     <td className='p-5'>
-                                        <img src={e.image} alt="" className='w-10 h-10' />
+                                        <img src={e.image} alt={e.name} className='w-10 h-10' />
                                     </td>
                                     <td className='p-5'>{e.name}</td>
                                     <td className='p-5'>Rs.{e.new_price}</td>
@@ -75,7 +102,7 @@ const CartItems = () => {
                         </tr>
                         <tr>
                             <td className='p-3 pl-0 text-left'>Tax</td>
-                            <td className='p-3 pl-20 text-right'>{amount*0.1}</td>
+                            <td className='p-3 pl-20 text-right'>Rs.{tax}</td>
                         </tr>
                         <tr className='border-b-4'>
                             <td className='p-3 pl-0 text-left'>Shipping Fee</td>
@@ -87,11 +114,8 @@ const CartItems = () => {
                         </tr>
                     </tbody>
                 </table>
-                {/* <button className='bg-purple-700 px-5 py-3 text-xl mt-10 text-white font-medium rounded-lg hover:scale-105 hover:shadow-lg hover:shadow-purple-500 transition-all'>
-                    Proceed To Checkout
-                </button> */}
 
-                <form action="https://rc-epay.esewa.com.np/api/epay/main/v2/form" method="POST">
+                <form action="https://rc-epay.esewa.com.np/api/epay/main/v2/form" method="POST" onSubmit={handleOrder}>
                     <input type="hidden" id="amount" name="amount" value={amount} required />
                     <input type="hidden" id="tax_amount" name="tax_amount" value={tax} required />
                     <input type="hidden" id="total_amount" name="total_amount" value={totalamount} required />
@@ -103,9 +127,10 @@ const CartItems = () => {
                     <input type="hidden" id="failure_url" name="failure_url" value="http://localhost:5173/failure" required />
                     <input type="hidden" id="signed_field_names" name="signed_field_names" value="total_amount,transaction_uuid,product_code" required />
                     <input type="hidden" id="signature" name="signature" value={signature} required />
+                    
                     <button className='bg-purple-700 px-5 py-3 text-xl mt-10 text-white font-medium rounded-lg hover:scale-105 hover:shadow-lg hover:shadow-purple-500 transition-all'>
-                    Proceed To Checkout
-                </button>
+                        Proceed To Checkout
+                    </button>
                 </form>
             </div>
         </div>

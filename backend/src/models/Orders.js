@@ -3,12 +3,11 @@ const { Schema } = mongoose;
 
 const orderSchema = new Schema({
     orderedBy: {
-        type: Schema.Types.ObjectId,
-        ref: "User",
+        type: String,
     },
-    bookId: {
+    productId: {
         type: Schema.Types.ObjectId,
-        ref: "Book",
+        ref: "Product",
     },
 
     quantity: {
@@ -17,7 +16,6 @@ const orderSchema = new Schema({
     },
     price: {
         type: Number,
-
     }
 
 
