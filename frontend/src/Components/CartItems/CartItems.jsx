@@ -45,7 +45,6 @@ const CartItems = () => {
         try {
             const res = await API.post('/order', order);
             if (res.data.success) {
-                alert("Order Placed Successfully");
                 event.target.submit();  
             }
         } catch (error) {
