@@ -6,16 +6,13 @@ import API from '../../API';
 
 const CartItems = () => {
     const { allProducts, cartItems, removeFromCart, getTotalAmount } = useContext(ShopContext);
-    const [orderBy, setOrderBy] = useState();
-    const [product, setProduct] = useState();
-    const [quantity, setQuantity] = useState();
-    const [price, setPrice] = useState();
+    
 
     const uid = uuidv4();
     const amount = getTotalAmount();
     const tax = Math.round((amount * 0.1) * 100) / 100;
     const totalamount = Math.round((amount + tax) * 100) / 100;
-    const userId = "USER_ID";  // Replace this with actual user context or state
+    const userId = "USER_ID";  
 
     const message = `total_amount=${totalamount},transaction_uuid=${uid},product_code=EPAYTEST`;
     const esewasecret = import.meta.env.VITE_ESEWASECRET;
@@ -23,8 +20,8 @@ const CartItems = () => {
     const signature = CryptoJS.enc.Base64.stringify(hash);
 
     const handleOrder = async (event) => {
-        event.preventDefault();  // Prevent form submission
-    
+        event.preventDefault();  
+        
         const orders = allProducts
             .filter(e => cartItems[e._id] > 0)
             .map(e => ({
@@ -41,18 +38,26 @@ const CartItems = () => {
                 quantity: ord.quantity,
                 price: ord.price
             };
-            console.log(order);
-                try {
-                    const res = await API.post('/order', order);
-                    if (res.data.success) {
-                        event.target.submit();
-                    }
-                } catch (error) {
-                    console.error('Error placing order:', error);
-                    alert("Failed to place order. Please try again.");
-                }  
+            console.log(order.productId);
+            try {
+                const res = await API.post('/order', order);
+                if (res.data.success) {
+                    const prodId = order.productId;
+                    const quantity = order.quantity;
+                    
+                    // Ensure quantity update is awaited
+                    await API.put(`/product/${prodId}/decrease`, { quantity });
+                    
+                    // Submit the form after successful order and quantity update
+                    event.target.submit();
+                }
+            } catch (error) {
+                console.error('Error placing order:', error);
+                alert("Failed to place order. Please try again.");
+            }  
         }
     };
+    ;
     
     return (
         <div className='p-5 flex flex-col items-center'>

@@ -43,7 +43,7 @@
                                 onChange={handleQuantityChange} 
                                 min="1" 
                             />
-                            <p className='text-lg font-medium text-gray-700 capitalize'>in stock</p>
+                            <p className='text-lg font-medium text-gray-700 capitalize'>{product.quantity} left in stock</p>
                         </div>
                         <button 
                             onClick={handleAddToCart} 

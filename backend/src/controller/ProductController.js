@@ -91,6 +91,35 @@ class ProductController {
             res.status(500).json({ message: err.message });
         }
     }
+
+    async decreaseQuantity(req, res) {
+        try {
+            let id = req.params.id;
+            let { quantity } = req.body;
+    
+            if (!quantity || quantity <= 0) {
+                return res.status(400).json({ message: "Invalid quantity value." });
+            }
+    
+            let product = await Product.findById(id);
+            if (!product) {
+                return res.status(404).json({ message: "Product not found." });
+            }
+    
+            if (product.quantity < quantity) {
+                return res.status(400).json({ message: "Not enough stock available." });
+            }
+    
+            product.quantity -= quantity;
+            await product.save();
+    
+            res.status(200).json({ success: true, message: "Quantity decreased successfully.", product });
+        } catch (err) {
+            res.status(500).json({ message: err.message });
+        }
+    }
+    
+    
 }
 
 export default ProductController;
