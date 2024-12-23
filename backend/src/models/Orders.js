@@ -16,6 +16,10 @@ const orderSchema = new Schema({
     },
     price: {
         type: Number,
+    },
+    status: {
+        type: String,
+        default: 'pending'
     }
 
 

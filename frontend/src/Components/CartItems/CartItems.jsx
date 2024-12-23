@@ -6,11 +6,11 @@ import API from '../../API';
 
 const CartItems = () => {
     const { allProducts, cartItems, removeFromCart, getTotalAmount } = useContext(ShopContext);
-    const [orderBy,setOrderBy]=useState();
-    const [product,setProduct]=useState();
-    const [quantity,setQuantity]=useState();
-    const [price,setPrice]=useState();
-    
+    const [orderBy, setOrderBy] = useState();
+    const [product, setProduct] = useState();
+    const [quantity, setQuantity] = useState();
+    const [price, setPrice] = useState();
+
     const uid = uuidv4();
     const amount = getTotalAmount();
     const tax = Math.round((amount * 0.1) * 100) / 100;
@@ -21,10 +21,10 @@ const CartItems = () => {
     const esewasecret = import.meta.env.VITE_ESEWASECRET;
     const hash = CryptoJS.HmacSHA256(message, esewasecret);
     const signature = CryptoJS.enc.Base64.stringify(hash);
-    
+
     const handleOrder = async (event) => {
         event.preventDefault();  // Prevent form submission
-
+    
         const orders = allProducts
             .filter(e => cartItems[e._id] > 0)
             .map(e => ({
@@ -33,26 +33,27 @@ const CartItems = () => {
                 quantity: cartItems[e._id],
                 price: e.new_price * cartItems[e._id],
             }));
-        
-        const order={
-            orderedBy:orders[0].orderedBy,
-            productId:orders[0].productId,
-            quantity:orders[0].quantity,
-            price:orders[0].price
-        }
-        console.log(order);
-
-        try {
-            const res = await API.post('/order', order);
-            if (res.data.success) {
-                event.target.submit();  
-            }
-        } catch (error) {
-            console.error('Error placing order:', error);
-            alert("Failed to place order. Please try again.");
+    
+        for (const ord of orders) {
+            const order = {
+                orderedBy: ord.orderedBy,
+                productId: ord.productId,
+                quantity: ord.quantity,
+                price: ord.price
+            };
+            console.log(order);
+                try {
+                    const res = await API.post('/order', order);
+                    if (res.data.success) {
+                        event.target.submit();
+                    }
+                } catch (error) {
+                    console.error('Error placing order:', error);
+                    alert("Failed to place order. Please try again.");
+                }  
         }
     };
-
+    
     return (
         <div className='p-5 flex flex-col items-center'>
             <table className='w-3/4'>
@@ -126,7 +127,7 @@ const CartItems = () => {
                     <input type="hidden" id="failure_url" name="failure_url" value="http://localhost:5173/failure" required />
                     <input type="hidden" id="signed_field_names" name="signed_field_names" value="total_amount,transaction_uuid,product_code" required />
                     <input type="hidden" id="signature" name="signature" value={signature} required />
-                    
+
                     <button className='bg-purple-700 px-5 py-3 text-xl mt-10 text-white font-medium rounded-lg hover:scale-105 hover:shadow-lg hover:shadow-purple-500 transition-all'>
                         Proceed To Checkout
                     </button>
